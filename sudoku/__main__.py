@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 import os
 import sys
-from . import sudoku_fahiem, utils
+from . import solver, utils
 
 
 if __name__ == "__main__":
@@ -33,6 +33,6 @@ if __name__ == "__main__":
         print("unsolved board:")
         utils.print_unsolved_board(board)
         print("solving...")
-        sudoku_fahiem.solve_search_naive(board)
+        solver.solve_search_naive(board)
         print("solved board:")
         utils.print_solved_board(board)

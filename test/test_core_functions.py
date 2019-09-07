@@ -1,4 +1,4 @@
-from sudoku import sudoku_fahiem, utils
+from sudoku import solver, utils
 import logging
 
 
@@ -18,9 +18,9 @@ def test_is_solved():
 912345678
 """
     board = utils.read_puzzle_string(puzzle)
-    assert sudoku_fahiem.check_format(board)
-    assert sudoku_fahiem.all_variables_assigned(board)
-    assert sudoku_fahiem.is_solved(board)
+    assert solver.check_format(board)
+    assert solver.all_variables_assigned(board)
+    assert solver.is_solved(board)
 
 
 def test_not_solved_unfinished():
@@ -36,8 +36,8 @@ def test_not_solved_unfinished():
 912345678
 """
     board = utils.read_puzzle_string(puzzle)
-    assert sudoku_fahiem.check_format(board)
-    assert not sudoku_fahiem.is_solved(board)
+    assert solver.check_format(board)
+    assert not solver.is_solved(board)
 
 
 def test_not_is_subsquare_constraint_satisfied():
@@ -54,5 +54,5 @@ def test_not_is_subsquare_constraint_satisfied():
 912345678
 """
     board = utils.read_puzzle_string(puzzle)
-    assert sudoku_fahiem.check_format(board)
-    assert not sudoku_fahiem.is_solved(board)
+    assert solver.check_format(board)
+    assert not solver.is_solved(board)

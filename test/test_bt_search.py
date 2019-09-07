@@ -4,7 +4,7 @@ http://lipas.uwasa.fi/~timan/sudoku/
 """
 
 
-from sudoku import sudoku_fahiem, utils
+from sudoku import solver, utils
 import time
 
 
@@ -14,7 +14,7 @@ def verify_solution(board, name):
     with open(solution_fname) as fp:
         s = fp.read()
     solution_board = utils.read_puzzle_string(s)
-    assert sudoku_fahiem.is_solved(solution_board)
+    assert solver.is_solved(solution_board)
     for row_i in range(9):
         for col_i in range(9):
             v = board[row_i][col_i]
@@ -38,9 +38,9 @@ def test_easy():
     for puzzle in easy:
         puzzle_fname = "data/puzzles/" + puzzle + ".txt"
         board = utils.read_board_from_file(puzzle_fname)
-        assert sudoku_fahiem.check_format(board)
+        assert solver.check_format(board)
         start = time.time()
-        solution_found = sudoku_fahiem.bt(1, board)
+        solution_found = solver.bt(1, board)
         end = time.time()
         print("%s - %.2f s" % (puzzle, end - start))
         assert solution_found, "Failed to find solution to puzzle %s" % puzzle
@@ -64,9 +64,9 @@ def test_medium():
     for puzzle in easy:
         puzzle_fname = "data/puzzles/" + puzzle + ".txt"
         board = utils.read_board_from_file(puzzle_fname)
-        assert sudoku_fahiem.check_format(board)
+        assert solver.check_format(board)
         start = time.time()
-        solution_found = sudoku_fahiem.bt(1, board)
+        solution_found = solver.bt(1, board)
         end = time.time()
         print("%s - %.2f s" % (puzzle, end - start))
         assert solution_found, "Failed to find solution to puzzle %s" % puzzle

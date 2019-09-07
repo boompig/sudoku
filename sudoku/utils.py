@@ -1,6 +1,3 @@
-from . import sudoku_fahiem
-
-
 def read_board_from_file(fname):
     puzzle = ""
     with open(fname) as fp:
@@ -17,15 +14,15 @@ def print_unsolved_board(board):
     for rowi, row in enumerate(board):
         if rowi > 0 and rowi % 3 == 0:
             print("-" * 21)
-        l = []
+        arr = []
         for coli, possible_values in enumerate(row):
             if coli > 0 and coli % 3 == 0:
-                l.append("|")
+                arr.append("|")
             if len(possible_values) == 1:
-                l.append(str(possible_values[0]))
+                arr.append(str(possible_values[0]))
             else:
-                l.append("?")
-        s = " ".join(l)
+                arr.append("?")
+        s = " ".join(arr)
         print(s)
 
 
