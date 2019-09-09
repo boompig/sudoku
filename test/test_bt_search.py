@@ -8,6 +8,15 @@ from sudoku import solver, utils
 import time
 
 
+EASY_PUZZLES = [
+    "s01a", "s01b", "s01c",
+    "s02a", "s02b", "s02c",
+    "s03a", "s03b", "s03c",
+    "s04a", "s04b", "s04c",
+    "s05a", "s05b", "s05c",
+]
+
+
 def verify_solution(board, name):
     solution_fname = "data/solutions/" + name + "_s.txt"
     s = ""
@@ -22,13 +31,13 @@ def verify_solution(board, name):
             assert v == expected_v
 
 
-def assert_solve_puzzle(puzzle):
+def assert_solve_puzzle(puzzle, strategy):
     puzzle_fname = "data/puzzles/" + puzzle + ".txt"
     board = utils.read_board_from_file(puzzle_fname)
     assert solver.check_format(board)
     stats = {}
     start = time.time()
-    solution_found = solver.bt(1, board, stats=stats)
+    solution_found = solver.bt(1, board, stats=stats, strategy=strategy)
     end = time.time()
     print("%s - %.2f s, expanded %d states" % (puzzle, end - start, stats["num_states_expanded"]))
     assert solution_found, "Failed to find solution to puzzle %s" % puzzle
@@ -39,22 +48,29 @@ def assert_solve_puzzle(puzzle):
 
 # NOTE: classifications are based on the results on the above webpage
 
-def test_easy():
+def test_easy_first_found():
+    for puzzle in EASY_PUZZLES:
+        assert_solve_puzzle(puzzle, strategy=solver.Strategies.FIRST_FOUND)
+
+
+def test_easy_min_row():
+    for puzzle in EASY_PUZZLES:
+        assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_ROW)
+
+
+def test_easy_min_heap():
     """easy should each take under a second to run per puzzle
     on the website these are the numerically-numbered difficulty"""
-
-    easy = [
-        "s01a", "s01b", "s01c",
-        "s02a", "s02b", "s02c",
-        "s03a", "s03b", "s03c",
-        "s04a", "s04b", "s04c",
-        "s05a", "s05b", "s05c",
-    ]
-    for puzzle in easy:
-        assert_solve_puzzle(puzzle)
+    for puzzle in EASY_PUZZLES:
+        assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_HEAP)
 
 
-def test_medium():
+def test_easy_min_heap_2():
+    for puzzle in EASY_PUZZLES:
+        assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_HEAP_2)
+
+
+def test_medium_min_heap():
     """medium should also take under a second to run per puzzle with few exceptions.
     On the website these are the lettered difficulty,
     as well as those labeled Easy and Medium
@@ -68,10 +84,10 @@ def test_medium():
         "s11a", "s11b", "s11c",
     ]
     for puzzle in puzzles:
-        assert_solve_puzzle(puzzle)
+        assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_HEAP)
 
 
-def test_advanced():
+def test_advanced_min_heap():
     """
     advanced tests are all the puzzles above medium
     most of these are in fact quite fast to solve (under 1s)
@@ -84,4 +100,4 @@ def test_advanced():
         "s16",
     ]
     for puzzle in puzzles:
-        assert_solve_puzzle(puzzle)
+        assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_HEAP)

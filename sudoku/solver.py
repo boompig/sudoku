@@ -159,6 +159,10 @@ def __pick_unassigned_variable_min_row(board):
     """
     For Sudoku, I attempt to pick a variable that has the most possible values remaining
     Note that the array `possible_values` is actually a misnomer and is just a symbol to indicate whether that variable is set or not
+
+    81 + 9 lookups
+    81 = count the number of unassigned variables for this row
+    9 = find the unassigned variable for this row
     """
     # try to find a row that has the fewest unassigned cells
     # note that there will be at least one row with
@@ -172,10 +176,7 @@ def __pick_unassigned_variable_min_row(board):
             min_row_unassigned = num_unassigned
             min_row = rowi
     assert min_row is not None, "The board is empty"
-    for coli, possible_values in enumerate(board[min_row]):
-        if len(possible_values) > 1:
-            return (min_row, coli)
-    raise Exception("something weird happened")
+    return __pick_unassigned_cell_row(board, min_row)
 
 
 def __pick_unasigned_cell_subsquare(board, subsquare_index):
@@ -222,7 +223,9 @@ def __pick_unassigned_variable_heap_2(board, unassigned_heap):
 
 def __pick_unassigned_variable_heap(board, unassigned_heap):
     """
-    This method requires traversing 27 items in an array on each state expansion
+    This method requires traversing 27 + 9 items on each call
+    27 = 3 * 9 = one for each constraint
+    9 = find the unassigned variable for that constraint
     """
     min_num_unassigned = 10
     min_unassigned_index = None
