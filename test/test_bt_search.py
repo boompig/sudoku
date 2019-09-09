@@ -58,7 +58,11 @@ def assert_solve_puzzle(puzzle, strategy):
     solution_found = solver.bt(1, board, stats=stats, strategy=strategy)
     end = time.time()
     print("{} - {:.2f}s, expanded {} states, {} backtracks, max depth={}".format(
-        puzzle, end - start, stats["num_states_expanded"], stats["num_backtracks"], stats["max_depth"]))
+        puzzle,
+        end - start,
+        stats["num_states_expanded"],
+        stats["num_backtracks"],
+        stats["max_depth"]))
     assert solution_found, "Failed to find solution to puzzle %s" % puzzle
     # print_solved_board(board)
     assert board is not None

@@ -1,5 +1,5 @@
 from . import solver
-import logging
+# import logging
 
 
 def read_board_from_file(fname):

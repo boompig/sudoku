@@ -153,8 +153,6 @@ def __pick_unassigned_variable_first_found(board):
 def __pick_unassigned_variable_min_row(board):
     """
     For Sudoku, I attempt to pick a variable that has the most possible values remaining
-    Note that the array `possible_values` is actually a misnomer and is just a symbol to indicate whether that variable is set or not
-
     81 + 9 lookups
     81 = count the number of unassigned variables for this row
     9 = find the unassigned variable for this row
