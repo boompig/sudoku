@@ -28,7 +28,7 @@ def assert_solve_puzzle(puzzle):
     assert solver.check_format(board)
     stats = {}
     start = time.time()
-    solution_found = solver.bt(1, board, stats)
+    solution_found = solver.bt(1, board, stats=stats)
     end = time.time()
     print("%s - %.2f s, expanded %d states" % (puzzle, end - start, stats["num_states_expanded"]))
     assert solution_found, "Failed to find solution to puzzle %s" % puzzle

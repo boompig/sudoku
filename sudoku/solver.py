@@ -14,6 +14,28 @@ valid_values := [number, ...]
 
 # import logging
 
+from enum import Enum
+
+
+class Strategies(Enum):
+    """
+    Possible strategies for choosing unassigned variable
+    """
+
+    # use the first unassigned variable found in the board in order
+    FIRST_FOUND = 1
+
+    # go through all the rows and find the one with the fewest unassigned variables
+    MIN_ROW = 2
+
+    # keep track of the number of unassigned variables in each column, row, subsquare
+    # choose the row/col/subsquare with the fewest unassigned variables
+    MIN_HEAP = 3
+
+    # keep track of the number of unassigned variables in each column, row, subsquare
+    # choose the cell which has the most constraints on it
+    MIN_HEAP_2 = 4
+
 
 def check_format(board):
     """
@@ -122,7 +144,7 @@ def is_solved(board):
     return True
 
 
-def __pick_unassigned_variable_brute_force(board):
+def __pick_unassigned_variable_first_found(board):
     for rowi, row in enumerate(board):
         for coli, possible_values in enumerate(row):
             if len(possible_values) > 1:
@@ -133,7 +155,7 @@ def __pick_unassigned_variable_brute_force(board):
     raise Exception("No more unassigned variables on this board")
 
 
-def __pick_unassigned_variable_best_row(board):
+def __pick_unassigned_variable_min_row(board):
     """
     For Sudoku, I attempt to pick a variable that has the most possible values remaining
     Note that the array `possible_values` is actually a misnomer and is just a symbol to indicate whether that variable is set or not
@@ -156,15 +178,149 @@ def __pick_unassigned_variable_best_row(board):
     raise Exception("something weird happened")
 
 
-def pick_unassigned_variable(board):
+def __pick_unasigned_cell_subsquare(board, subsquare_index):
+    for (rowi, coli) in iterate_subsquare(subsquare_index):
+        if len(board[rowi][coli]) > 1:
+            return (rowi, coli)
+    raise Exception("unable to find unassigned cell in subsquare")
+
+
+def __pick_unassigned_cell_col(board, coli):
+    for rowi in range(9):
+        if len(board[rowi][coli]) > 1:
+            return (rowi, coli)
+    raise Exception("unable to find unassigned cell in column")
+
+
+def __pick_unassigned_cell_row(board, rowi):
+    for coli in range(9):
+        if len(board[rowi][coli]) > 1:
+            return (rowi, coli)
+    raise Exception("unable to find unassigned cell in row")
+
+
+def __pick_unassigned_variable_heap_2(board, unassigned_heap):
+    assert unassigned_heap is not None
+    min_num_unassigned = 10
+    min_unassigned_pos = None
+    for rowi in range(9):
+        for coli in range(9):
+            if len(board[rowi][coli]) > 1:
+                ssi = get_subsquare_index((rowi, coli))
+                num_unassigned = min(
+                    unassigned_heap["subsquare"][ssi],
+                    unassigned_heap["row"][rowi],
+                    unassigned_heap["col"][coli]
+                )
+                assert num_unassigned > 0
+                if num_unassigned > 0 and num_unassigned < min_num_unassigned:
+                    min_num_unassigned = num_unassigned
+                    min_unassigned_pos = (rowi, coli)
+    assert min_unassigned_pos is not None
+    return min_unassigned_pos
+
+
+def __pick_unassigned_variable_heap(board, unassigned_heap):
+    """
+    This method requires traversing 27 items in an array on each state expansion
+    """
+    min_num_unassigned = 10
+    min_unassigned_index = None
+    min_unassigned_type = None
+    for i in range(9):
+        for t in ["row", "col", "subsquare"]:
+            num_unassigned = unassigned_heap[t][i]
+            if num_unassigned > 0 and num_unassigned < min_num_unassigned:
+                min_num_unassigned = num_unassigned
+                min_unassigned_index = i
+                min_unassigned_type = t
+    assert min_unassigned_index is not None
+    assert min_unassigned_type is not None
+    # find the cell in the target place
+    if min_unassigned_type == "row":
+        return __pick_unassigned_cell_row(board, min_unassigned_index)
+    elif min_unassigned_type == "col":
+        return __pick_unassigned_cell_col(board, min_unassigned_index)
+    else:
+        return __pick_unasigned_cell_subsquare(board, min_unassigned_index)
+
+
+def pick_unassigned_variable(board, strategy, unassigned_heap):
     """
     :returns: (row_index, col_index)
     """
-    # return __pick_unassigned_variable_brute_force(board)
-    return __pick_unassigned_variable_best_row(board)
+    if strategy == Strategies.FIRST_FOUND:
+        return __pick_unassigned_variable_first_found(board)
+    elif strategy == Strategies.MIN_ROW:
+        return __pick_unassigned_variable_min_row(board)
+    else:
+        (rowi, coli) = (-1, -1)
+        if strategy == Strategies.MIN_HEAP:
+            (rowi, coli) = __pick_unassigned_variable_heap(board, unassigned_heap)
+        else:
+            (rowi, coli) = __pick_unassigned_variable_heap_2(board, unassigned_heap)
+        # update the heap
+        unassigned_heap["row"][rowi] -= 1
+        unassigned_heap["col"][coli] -= 1
+        ssi = get_subsquare_index((rowi, coli))
+        unassigned_heap["subsquare"][ssi] -= 1
+        return (rowi, coli)
 
 
-def bt(level, board, stats=None):
+def iterate_subsquare(subsquare_index):
+    row_start = (subsquare_index // 3) * 3
+    col_start = (subsquare_index % 3) * 3
+    for row_index in range(row_start, row_start + 3):
+        for col_index in range(col_start, col_start + 3):
+            yield (row_index, col_index)
+
+
+def create_unassigned_heap(board):
+    """
+    This is not very fast but is only executed once
+    """
+    num_unassigned_subsquare = []
+    for ssi in range(9):
+        num_unassigned = 0
+        for (rowi, coli) in iterate_subsquare(ssi):
+            if len(board[rowi][coli]) > 1:
+                num_unassigned += 1
+        num_unassigned_subsquare.append(num_unassigned)
+
+    num_unassigned_col = []
+    for coli in range(9):
+        num_unassigned = 0
+        for rowi in range(9):
+            if len(board[rowi][coli]) > 1:
+                num_unassigned += 1
+        num_unassigned_col.append(num_unassigned)
+
+    num_unassigned_row = []
+    for rowi in range(9):
+        num_unassigned = 0
+        for coli in range(9):
+            if len(board[rowi][coli]) > 1:
+                num_unassigned += 1
+        num_unassigned_row.append(num_unassigned)
+
+    return {
+        "row": num_unassigned_row,
+        "col": num_unassigned_col,
+        "subsquare": num_unassigned_subsquare
+    }
+
+
+def reset_unassigned_variable(board, position, prev_value, unassigned_heap):
+    board[position[0]][position[1]] = prev_value
+    if unassigned_heap:
+        ssi = get_subsquare_index(position)
+        unassigned_heap["subsquare"][ssi] += 1
+        rowi, coli = position
+        unassigned_heap["row"][rowi] += 1
+        unassigned_heap["col"][coli] += 1
+
+
+def bt(level, board, strategy=Strategies.MIN_HEAP, stats=None, unassigned_heap=None):
     """Backtracking search implementation straight from the slides"""
     # keep track of the number of states expanded
     if stats is None:
@@ -172,18 +328,22 @@ def bt(level, board, stats=None):
     stats.setdefault("num_states_expanded", 0)
     stats["num_states_expanded"] += 1
 
+    if strategy in [Strategies.MIN_HEAP, Strategies.MIN_HEAP_2] and unassigned_heap is None:
+        unassigned_heap = create_unassigned_heap(board)
+
     if all_variables_assigned(board):
         return True
-    position = pick_unassigned_variable(board)
+    position = pick_unassigned_variable(board, strategy, unassigned_heap)
     possible_values = board[position[0]][position[1]]
     for v in possible_values:
         if all_constraints_satisfied(board, position, v):
             board[position[0]][position[1]] = [v]
-            if bt(level + 1, board, stats):
+            if bt(level + 1, board, strategy, stats=stats, unassigned_heap=unassigned_heap):
                 return True
+
     # none of the assignments work
     # undo the assignment
-    board[position[0]][position[1]] = possible_values
+    reset_unassigned_variable(board, position, possible_values, unassigned_heap)
     return False
 
 

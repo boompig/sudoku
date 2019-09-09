@@ -1,5 +1,8 @@
+# editor
 *.code-workspace
 .vscode
+
+# python
 *.pyc
-requirements.txt
 venv*
+.pytest_cache
