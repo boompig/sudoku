@@ -122,10 +122,7 @@ def is_solved(board):
     return True
 
 
-def pick_unassigned_variable(board):
-    """
-    :returns: (row_index, col_index)
-    """
+def __pick_unassigned_variable_brute_force(board):
     for rowi, row in enumerate(board):
         for coli, possible_values in enumerate(row):
             if len(possible_values) > 1:
@@ -136,8 +133,45 @@ def pick_unassigned_variable(board):
     raise Exception("No more unassigned variables on this board")
 
 
-def bt(level, board):
+def __pick_unassigned_variable_best_row(board):
+    """
+    For Sudoku, I attempt to pick a variable that has the most possible values remaining
+    Note that the array `possible_values` is actually a misnomer and is just a symbol to indicate whether that variable is set or not
+    """
+    # try to find a row that has the fewest unassigned cells
+    # note that there will be at least one row with
+    min_row = 0
+    min_row_unassigned = 10
+    for rowi, row in enumerate(board):
+        num_unassigned = sum([
+            len(possible_values) > 1 for possible_values in row
+        ])
+        if num_unassigned < min_row_unassigned and num_unassigned > 0:
+            min_row_unassigned = num_unassigned
+            min_row = rowi
+    assert min_row is not None, "The board is empty"
+    for coli, possible_values in enumerate(board[min_row]):
+        if len(possible_values) > 1:
+            return (min_row, coli)
+    raise Exception("something weird happened")
+
+
+def pick_unassigned_variable(board):
+    """
+    :returns: (row_index, col_index)
+    """
+    # return __pick_unassigned_variable_brute_force(board)
+    return __pick_unassigned_variable_best_row(board)
+
+
+def bt(level, board, stats=None):
     """Backtracking search implementation straight from the slides"""
+    # keep track of the number of states expanded
+    if stats is None:
+        stats = {}
+    stats.setdefault("num_states_expanded", 0)
+    stats["num_states_expanded"] += 1
+
     if all_variables_assigned(board):
         return True
     position = pick_unassigned_variable(board)
@@ -145,7 +179,7 @@ def bt(level, board):
     for v in possible_values:
         if all_constraints_satisfied(board, position, v):
             board[position[0]][position[1]] = [v]
-            if bt(level + 1, board):
+            if bt(level + 1, board, stats):
                 return True
     # none of the assignments work
     # undo the assignment
