@@ -28,7 +28,13 @@ python -m sudoku [-f fname] [-d dirname] [-s strategy] [--help]
 ## Testing
 
 ```
-PYTHONPATH=. pytest test
+pytest test
+```
+
+or with coverage
+
+```
+pytest test --cov=sudoku --cov-report=html
 ```
 
 ## Linting
