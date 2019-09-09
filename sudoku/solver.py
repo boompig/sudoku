@@ -67,12 +67,11 @@ def is_row_constraint_satisfied(board, row_index, position, value):
     :param value: value for that position (1, 9)
     :returns: true iff the row constraint for this row has been violated
     """
-    # find the numbers that are set
-    numbers = []
     for col_index, possible_values in enumerate(board[row_index]):
         if len(possible_values) == 1 and col_index != position[1]:
-            numbers.append(possible_values[0])
-    return value not in numbers
+            if value == possible_values[0]:
+                return False
+    return True
 
 
 def is_col_constraint_satisfied(board, col_index, position, value):
@@ -80,12 +79,12 @@ def is_col_constraint_satisfied(board, col_index, position, value):
     :param board: array of arrays, assume board is properly formatted
     :returns: true iff the column constraint for this column has been violated
     """
-    numbers = []
     for row_index in range(9):
         possible_values = board[row_index][col_index]
         if len(possible_values) == 1 and row_index != position[0]:
-            numbers.append(possible_values[0])
-    return value not in numbers
+            if value == possible_values[0]:
+                return False
+    return True
 
 
 def is_subsquare_constraint_satisfied(board, subsquare_index, position, value):
@@ -93,16 +92,12 @@ def is_subsquare_constraint_satisfied(board, subsquare_index, position, value):
     :param board: array of arrays, assume board is properly formatted
     :param subsquare_index: left to right, top to bottom
     """
-    numbers = []
-    row_start = (subsquare_index // 3) * 3
-    col_start = (subsquare_index % 3) * 3
-    for row_index in range(row_start, row_start + 3):
-        for col_index in range(col_start, col_start + 3):
-            possible_values = board[row_index][col_index]
-            if (len(possible_values) == 1 and
-                    (row_index, col_index) != position):
-                numbers.append(possible_values[0])
-    return value not in numbers
+    for (rowi, coli) in iterate_subsquare(subsquare_index):
+        possible_values = board[rowi][coli]
+        if (len(possible_values) == 1 and (rowi, coli) != position):
+            if value == possible_values[0]:
+                return False
+    return True
 
 
 def get_subsquare_index(position):

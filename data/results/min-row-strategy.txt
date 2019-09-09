@@ -1,48 +1,48 @@
-s01a - 0.01 s, expanded 319 states
-s01b - 0.00 s, expanded 72 states
-s01c - 0.00 s, expanded 101 states
-s02a - 0.02 s, expanded 488 states
-s02b - 0.06 s, expanded 1257 states
-s02c - 0.01 s, expanded 191 states
-s03a - 0.02 s, expanded 435 states
-s03b - 0.48 s, expanded 10445 states
-s03c - 0.02 s, expanded 386 states
-s04a - 0.05 s, expanded 990 states
-s04b - 0.21 s, expanded 4278 states
-s04c - 0.02 s, expanded 462 states
-s05a - 0.03 s, expanded 624 states
-s05b - 0.40 s, expanded 8477 states
-s05c - 0.05 s, expanded 1007 states
+s01a - 0.00s, expanded 55 states, 16 backtracks, max depth=28
+s01b - 0.00s, expanded 26 states, 6 backtracks, max depth=13
+s01c - 0.00s, expanded 73 states, 27 backtracks, max depth=37
+s02a - 0.03s, expanded 1006 states, 955 backtracks, max depth=44
+s02b - 0.01s, expanded 438 states, 388 backtracks, max depth=36
+s02c - 0.00s, expanded 116 states, 69 backtracks, max depth=39
+s03a - 0.00s, expanded 126 states, 79 backtracks, max depth=32
+s03b - 0.20s, expanded 6200 states, 6146 backtracks, max depth=45
+s03c - 0.01s, expanded 376 states, 328 backtracks, max depth=33
+s04a - 0.03s, expanded 990 states, 936 backtracks, max depth=44
+s04b - 0.19s, expanded 5895 states, 5843 backtracks, max depth=42
+s04c - 0.04s, expanded 1375 states, 1322 backtracks, max depth=42
+s05a - 0.02s, expanded 624 states, 572 backtracks, max depth=43
+s05b - 0.24s, expanded 8477 states, 8423 backtracks, max depth=44
+s05c - 0.02s, expanded 543 states, 492 backtracks, max depth=43
 
-s06a - 0.00 s, expanded 78 states
-s06b - 0.00 s, expanded 44 states
-s06c - 0.00 s, expanded 57 states
-s07a - 0.07 s, expanded 1674 states
-s07b - 1.10 s, expanded 23646 states
-s07c - 0.01 s, expanded 303 states
-s08a - 1.16 s, expanded 25568 states
-s08b - 0.65 s, expanded 15752 states
-s08c - 0.31 s, expanded 6101 states
-s09a - 1.11 s, expanded 24525 states
-s09b - 0.82 s, expanded 19109 states
-s09c - 3.85 s, expanded 86899 states
-s10a - 0.01 s, expanded 112 states
-s10b - 0.00 s, expanded 93 states
-s10c - 0.00 s, expanded 74 states
-s11a - 0.04 s, expanded 839 states
-s11b - 0.72 s, expanded 16560 states
-s11c - 0.14 s, expanded 2611 states
+s06a - 0.00s, expanded 23 states, 4 backtracks, max depth=8
+s06b - 0.00s, expanded 8 states, 0 backtracks, max depth=0
+s06c - 0.00s, expanded 28 states, 1 backtracks, max depth=20
+s07a - 0.05s, expanded 1613 states, 1561 backtracks, max depth=34
+s07b - 0.07s, expanded 2401 states, 2353 backtracks, max depth=39
+s07c - 0.00s, expanded 113 states, 64 backtracks, max depth=39
+s08a - 0.74s, expanded 25568 states, 25508 backtracks, max depth=50
+s08b - 0.40s, expanded 15707 states, 15651 backtracks, max depth=45
+s08c - 0.08s, expanded 2390 states, 2334 backtracks, max depth=42
+s09a - 0.74s, expanded 24525 states, 24466 backtracks, max depth=46
+s09b - 0.56s, expanded 19109 states, 19049 backtracks, max depth=51
+s09c - 2.48s, expanded 86899 states, 86839 backtracks, max depth=48
+s10a - 0.00s, expanded 59 states, 14 backtracks, max depth=29
+s10b - 0.00s, expanded 96 states, 53 backtracks, max depth=33
+s10c - 0.00s, expanded 52 states, 7 backtracks, max depth=9
+s11a - 0.02s, expanded 837 states, 784 backtracks, max depth=42
+s11b - 0.14s, expanded 4863 states, 4809 backtracks, max depth=44
+s11c - 0.09s, expanded 2611 states, 2557 backtracks, max depth=47
 
-s12a - 1.48 s, expanded 31274 states
-s12b - 0.15 s, expanded 2504 states
-s12c - 3.77 s, expanded 82520 states
-s13a - 0.00 s, expanded 86 states
-s13b - 0.00 s, expanded 56 states
-s13c - 0.01 s, expanded 178 states
-s14a - 0.09 s, expanded 1677 states
-s14b - 0.11 s, expanded 2022 states
-s14c - 0.17 s, expanded 3200 states
-s15a - 0.09 s, expanded 1764 states
-s15b - 1.77 s, expanded 36445 states
-s15c - 0.31 s, expanded 6333 states
-s16 - 0.47 s, expanded 8970 states
+s12a - 0.99s, expanded 31274 states, 31214 backtracks, max depth=50
+s12b - 0.07s, expanded 2504 states, 2448 backtracks, max depth=48
+s12c - 2.31s, expanded 82520 states, 82461 backtracks, max depth=51
+s13a - 0.00s, expanded 64 states, 21 backtracks, max depth=33
+s13b - 0.00s, expanded 64 states, 21 backtracks, max depth=30
+s13c - 0.00s, expanded 120 states, 83 backtracks, max depth=28
+s14a - 0.02s, expanded 454 states, 406 backtracks, max depth=38
+s14b - 0.07s, expanded 2102 states, 2055 backtracks, max depth=37
+s14c - 0.09s, expanded 3073 states, 3024 backtracks, max depth=37
+s15a - 0.06s, expanded 1845 states, 1792 backtracks, max depth=42
+s15b - 1.04s, expanded 36445 states, 36390 backtracks, max depth=47
+s15c - 0.19s, expanded 6440 states, 6384 backtracks, max depth=44
+s16 - 0.29s, expanded 8970 states, 8911 backtracks, max depth=51

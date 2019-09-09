@@ -17,7 +17,7 @@ def test_is_solved():
 678912345
 912345678
 """
-    board = utils.read_puzzle_string(puzzle)
+    board = utils.read_puzzle_string(puzzle, prune=False)
     assert solver.check_format(board)
     assert solver.all_variables_assigned(board)
     assert solver.is_solved(board)
@@ -35,7 +35,7 @@ def test_not_solved_unfinished():
 678912345
 912345678
 """
-    board = utils.read_puzzle_string(puzzle)
+    board = utils.read_puzzle_string(puzzle, prune=False)
     assert solver.check_format(board)
     assert not solver.is_solved(board)
 
@@ -53,6 +53,6 @@ def test_not_is_subsquare_constraint_satisfied():
 891234567
 912345678
 """
-    board = utils.read_puzzle_string(puzzle)
+    board = utils.read_puzzle_string(puzzle, prune=False)
     assert solver.check_format(board)
     assert not solver.is_solved(board)

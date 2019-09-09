@@ -16,6 +16,24 @@ EASY_PUZZLES = [
     "s05a", "s05b", "s05c",
 ]
 
+MED_PUZZLES = [
+    "s06a", "s06b", "s06c",
+    "s07a", "s07b", "s07c",
+    "s08a", "s08b", "s08c",
+    "s09a", "s09b", "s09c",
+    "s10a", "s10b", "s10c",
+    "s11a", "s11b", "s11c",
+]
+
+
+ADVANCED_PUZZLES = [
+    "s12a", "s12b", "s12c",
+    "s13a", "s13b", "s13c",
+    "s14a", "s14b", "s14c",
+    "s15a", "s15b", "s15c",
+    "s16",
+]
+
 
 def verify_solution(board, name):
     solution_fname = "data/solutions/" + name + "_s.txt"
@@ -39,7 +57,7 @@ def assert_solve_puzzle(puzzle, strategy):
     start = time.time()
     solution_found = solver.bt(1, board, stats=stats, strategy=strategy)
     end = time.time()
-    print("{} - {:2f}s, expanded {} states, {} backtracks, max depth={}".format(
+    print("{} - {:.2f}s, expanded {} states, {} backtracks, max depth={}".format(
         puzzle, end - start, stats["num_states_expanded"], stats["num_backtracks"], stats["max_depth"]))
     assert solution_found, "Failed to find solution to puzzle %s" % puzzle
     # print_solved_board(board)
@@ -71,20 +89,22 @@ def test_easy_min_heap_2():
         assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_HEAP_2)
 
 
+def test_medium_min_row():
+    for puzzle in MED_PUZZLES:
+        assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_ROW)
+
+
+def test_advanced_min_row():
+    for puzzle in ADVANCED_PUZZLES:
+        assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_ROW)
+
+
 def test_medium_min_heap():
     """medium should also take under a second to run per puzzle with few exceptions.
     On the website these are the lettered difficulty,
     as well as those labeled Easy and Medium
     Currently the longest running are 7b and 9c"""
-    puzzles = [
-        "s06a", "s06b", "s06c",
-        "s07a", "s07b", "s07c",
-        "s08a", "s08b", "s08c",
-        "s09a", "s09b", "s09c",
-        "s10a", "s10b", "s10c",
-        "s11a", "s11b", "s11c",
-    ]
-    for puzzle in puzzles:
+    for puzzle in MED_PUZZLES:
         assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_HEAP)
 
 
@@ -93,12 +113,5 @@ def test_advanced_min_heap():
     advanced tests are all the puzzles above medium
     most of these are in fact quite fast to solve (under 1s)
     except 15c which may take a bit longer"""
-    puzzles = [
-        "s12a", "s12b", "s12c",
-        "s13a", "s13b", "s13c",
-        "s14a", "s14b", "s14c",
-        "s15a", "s15b", "s15c",
-        "s16",
-    ]
-    for puzzle in puzzles:
+    for puzzle in ADVANCED_PUZZLES:
         assert_solve_puzzle(puzzle, strategy=solver.Strategies.MIN_HEAP)
