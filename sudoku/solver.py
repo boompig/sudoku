@@ -329,6 +329,8 @@ def bt(level, board, strategy=Strategies.MIN_HEAP, stats=None, unassigned_heap=N
     if stats is None:
         stats = {}
     stats.setdefault("num_states_expanded", 0)
+    stats.setdefault("num_backtracks", 0)
+    stats.setdefault("max_depth", 0)
     stats["num_states_expanded"] += 1
 
     if strategy in [Strategies.MIN_HEAP, Strategies.MIN_HEAP_2] and unassigned_heap is None:
@@ -347,6 +349,8 @@ def bt(level, board, strategy=Strategies.MIN_HEAP, stats=None, unassigned_heap=N
     # none of the assignments work
     # undo the assignment
     reset_unassigned_variable(board, position, possible_values, unassigned_heap)
+    stats["num_backtracks"] += 1
+    stats["max_depth"] = max(stats["max_depth"], level)
     return False
 
 
@@ -355,4 +359,4 @@ def solve_search_naive(board, strategy):
     param board: array of arrays, assume board is properly formatted
     """
     # we start with a board
-    return bt(1, board, strategy=strategy)
+    return bt(0, board, strategy=strategy)
