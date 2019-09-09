@@ -10,7 +10,13 @@ if __name__ == "__main__":
                         help="puzzle filenames. See data/puzzles for examples")
     parser.add_argument("-d", "--dirname",
                         help="Solve all .txt puzzle files in directory")
+    parser.add_argument("-s", "--strategy",
+                        choices=[strat.name for strat in solver.Strategies],
+                        default=solver.Strategies.MIN_HEAP.name,
+                        help="Strategy for state expansion")
     args = parser.parse_args()
+
+    print(f"Using strategy {args.strategy}")
 
     filenames = list(args.filename)
     if args.dirname:
@@ -33,6 +39,9 @@ if __name__ == "__main__":
         print("unsolved board:")
         utils.print_unsolved_board(board)
         print("solving...")
-        solver.solve_search_naive(board)
+        solver.solve_search_naive(
+            board,
+            strategy=solver.Strategies[args.strategy]
+        )
         print("solved board:")
         utils.print_solved_board(board)

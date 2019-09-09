@@ -22,7 +22,7 @@ This sudoku solver works via DFS. There are much smarter ways to implement a Sud
 ## Run
 
 ```
-python -m sudoku [-f fname] [-d dirname] [--help]
+python -m sudoku [-f fname] [-d dirname] [-s strategy] [--help]
 ```
 
 ## Testing
