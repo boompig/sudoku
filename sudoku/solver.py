@@ -347,9 +347,9 @@ def bt(level, board, strategy=Strategies.MIN_HEAP, stats=None, unassigned_heap=N
     return False
 
 
-def solve_search_naive(board, strategy):
+def solve_search_naive(board, strategy, stats):
     """
     param board: array of arrays, assume board is properly formatted
     """
     # we start with a board
-    return bt(0, board, strategy=strategy)
+    return bt(0, board, strategy=strategy, stats=stats)

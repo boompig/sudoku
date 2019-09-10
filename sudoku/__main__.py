@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 import os
 import sys
 from . import solver, utils
+from pprint import pprint
 
 
 if __name__ == "__main__":
@@ -14,6 +15,9 @@ if __name__ == "__main__":
                         choices=[strat.name for strat in solver.Strategies],
                         default=solver.Strategies.MIN_HEAP.name,
                         help="Strategy for state expansion")
+    parser.add_argument("-v", "--verbose",
+                        action="store_true",
+                        help="If set will also print stats about search")
     args = parser.parse_args()
 
     print(f"Using strategy {args.strategy}")
@@ -39,9 +43,13 @@ if __name__ == "__main__":
         print("unsolved board:")
         utils.print_unsolved_board(board)
         print("solving...")
+        stats = {}
         solver.solve_search_naive(
             board,
-            strategy=solver.Strategies[args.strategy]
+            strategy=solver.Strategies[args.strategy],
+            stats=stats
         )
         print("solved board:")
         utils.print_solved_board(board)
+        if args.verbose:
+            pprint(stats)
