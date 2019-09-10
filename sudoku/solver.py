@@ -120,9 +120,9 @@ def all_variables_assigned(board):
             possible_values = board[row_index][col_index]
             if len(possible_values) > 1:
                 return False
-            if len(possible_values) == 0:
-                raise Exception("no possible values at position (%d, %d)" %
-                                (row_index, col_index))
+            assert possible_values != [], \
+                "no possible values at position (%d, %d)" % \
+                (row_index, col_index)
     return True
 
 
@@ -144,9 +144,9 @@ def __pick_unassigned_variable_first_found(board):
         for coli, possible_values in enumerate(row):
             if len(possible_values) > 1:
                 return (rowi, coli)
-            elif len(possible_values) == 0:
-                raise Exception("no possible values for position (%d, %d)" %
-                                (rowi, coli))
+            assert possible_values != [], \
+                "no possible values for position (%d, %d)" % \
+                (rowi, coli)
     raise Exception("No more unassigned variables on this board")
 
 
